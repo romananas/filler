@@ -3,4 +3,8 @@
 #![allow(unused_imports)]
 
 mod player;
-use player::*;
+mod parsing;
+mod points;
+
+mod tests;
+pub use parsing::*;
