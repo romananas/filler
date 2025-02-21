@@ -1,3 +1,5 @@
+mod parsing;
+
 fn main() {
     let mut line = String::new();
     let mut input: String = String::new();
