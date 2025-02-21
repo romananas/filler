@@ -1,8 +1,9 @@
 use super::{player::Player, points::{self, Point}};
 
-pub struct AntField<'a> {
+#[derive(Debug,PartialEq,Eq,Clone)]
+pub struct AnField<'a> {
     // player data
-    player: Player<'a>,
+    pub player: Player<'a>,
 
     // player owned points
     pub self_owned: Vec<Point>,
@@ -15,7 +16,7 @@ pub struct AntField<'a> {
     pub width: u32,
 }
 
-impl<'a> AntField<'a> {
+impl<'a> AnField<'a> {
     pub fn parse(arg: &str) -> Self {
         let lines = arg.split("\n").collect::<Vec<&str>>();
         let player_n = match extract_player(lines[0]) {
@@ -30,11 +31,11 @@ impl<'a> AntField<'a> {
         let adv = Player::new(p2, None);
         let (w,l) = match extract_lenght_width(lines[1]) {
             Some((w,l)) => (w,l),
-            None => panic!("can't parse antfield size"),
+            None => panic!("can't parse anfield size"),
         };
         let field = match extract_field(lines[3..(3+l) as usize].to_vec()) {
             Some(f) => f,
-            None => panic!("can't parse antfield on lines 3 - {}",3+l),
+            None => panic!("can't parse anfield on lines 3 - {}",3+l),
         };
         let player_owned = get_points(field.clone(), p.chars());
         let ennemie_owned = get_points(field, adv.chars());
@@ -81,7 +82,7 @@ pub fn extract_lenght_width(line: &str) -> Option<(u32,u32)> {
     if tmp.len() != 3{
         return None;
     }
-    if tmp[0] != "Antfield" || !tmp[2].ends_with(":") {
+    if tmp[0] != "Anfield" || !tmp[2].ends_with(":") {
         return None;
     }
     match (tmp[1].parse::<u32>(),tmp[2][0..tmp[2].len() -1].parse::<u32>()) {

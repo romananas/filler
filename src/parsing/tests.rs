@@ -1,6 +1,4 @@
-use std::result;
-
-use super::parsing;
+use super::{parsing, player, AnField};
 
 #[test]
 fn ft_extract_player() {
@@ -19,10 +17,10 @@ fn ft_extract_player() {
 #[test]
 fn ft_extract_wl() {
     let results = vec![
-        ((parsing::extract_lenght_width("Antfield 20 15:")),Some((20,15))),
-        ((parsing::extract_lenght_width("Antfield 20 15")),None),
-        ((parsing::extract_lenght_width("Antfield 20")),None),
-        ((parsing::extract_lenght_width("Anfield 20 16:")),None),
+        ((parsing::extract_lenght_width("Anfield 20 15:")),Some((20,15))),
+        ((parsing::extract_lenght_width("Anfield 20 15")),None),
+        ((parsing::extract_lenght_width("Anfield 20")),None),
+        ((parsing::extract_lenght_width("Antfield 20 16:")),None),
     ];
     for result in results {
         assert_eq!(result.0,result.1);

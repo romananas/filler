@@ -3,6 +3,7 @@
 const DEFAULT_PLAYER1: &str = "@a";
 const DEFAULT_PLAYER2: &str = "$s";
 
+#[derive(Debug,PartialEq,Eq,Clone, Copy)]
 pub struct Player<'a> {
 	id: usize,
 	chars: &'a str,
