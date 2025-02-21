@@ -7,24 +7,29 @@ pub struct AntField<'a> {
     player: Player<'a>,
 
     // player owned points
-    self_owned: Vec<Point>,
+    pub self_owned: Vec<Point>,
 
     // Ennemies owned points
-    ennemie_owned: Vec<Point>,
+    pub ennemie_owned: Vec<Point>,
 
     // width and length of the AntField
-    length: u32,
-    width: u32,
+    pub length: u32,
+    pub width: u32,
 }
 
 impl<'a> AntField<'a> {
     pub fn parse(arg: &str) -> Self {
         let lines = arg.split("\n").collect::<Vec<&str>>();
-        let mut player_n = match extract_player(lines[0]) {
+        let player_n = match extract_player(lines[0]) {
             Some(v) => v,
             None => panic!("can't parse player number"),
         };
         let p = Player::new(player_n as usize, None);
+        let p2 = match p.id() {
+            1 => 2,
+            _ => 1,
+        };
+        let adv = Player::new(p2, None);
         let (w,l) = match extract_lenght_width(lines[1]) {
             Some((w,l)) => (w,l),
             None => panic!("can't parse antfield size"),
@@ -33,9 +38,15 @@ impl<'a> AntField<'a> {
             Some(f) => f,
             None => panic!("can't parse antfield on lines 3 - {}",3+l),
         };
-        let player_owned = get_points(field, p.chars());
-        let ennemie_owned = get_points(field, "")
-        todo!()
+        let player_owned = get_points(field.clone(), p.chars());
+        let ennemie_owned = get_points(field, adv.chars());
+        Self {
+            player: p,
+            self_owned: player_owned,
+            ennemie_owned: ennemie_owned,
+            length: l,
+            width: w,
+        }
     }
 }
 
