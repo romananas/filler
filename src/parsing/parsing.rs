@@ -1,5 +1,3 @@
-use regex::Regex;
-
 use super::{player::Player, points::{self, Point}};
 
 pub struct AntField<'a> {
@@ -93,16 +91,17 @@ pub fn extract_lenght_width(line: &str) -> Option<(u32,u32)> {
 }
 
 pub fn extract_player(line: &str) -> Option<u32>{
-    let re = Regex::new("^[$]{3} exec p(\\d+)").unwrap();
-    let cptr = match re.captures(line) {
-        Some(value) => value,
-        None => return None,
-    };
-    match cptr.get(1).unwrap().as_str().parse::<u32>() {
+    let tmp = line.split_ascii_whitespace().collect::<Vec<&str>>();
+    if tmp.len() != 5 {
+        return None;
+    }
+    if tmp[0] != "$$$" || tmp[1] != "exec" || !tmp[2].starts_with("p") {
+        return None;
+    }
+    match tmp[2][1..].parse::<u32>() {
         Ok(v) => Some(v),
         Err(e) => {
-            dbg!(e);
-            None
-        },
+            panic!("{e}");
+        }
     }
 }
