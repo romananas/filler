@@ -14,4 +14,5 @@ fn main() {
         }
         input = String::new();
     }
+
 }
