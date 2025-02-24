@@ -51,7 +51,9 @@ fn mt_af_parse() {
         014 ....................
         Piece 4 1:
         .OO.";
-    
+
+    let f1_expected = 
+    "AnField { player: Player { id: 1, chars: \"@a\" }, self_owned: [Point { x: 9, y: 2 }], ennemie_owned: [Point { x: 9, y: 12 }], length: 15, width: 20, piece: Piece { slots: [Used(Point { x: 0, y: 0 }), Used(Point { x: 1, y: 0 }), Used(Point { x: 2, y: 0 }), Used(Point { x: 3, y: 0 }), Used(Point { x: 4, y: 0 }), Used(Point { x: 5, y: 0 }), Used(Point { x: 6, y: 0 }), Used(Point { x: 7, y: 0 }), Unused(Point { x: 8, y: 0 }), Used(Point { x: 9, y: 0 }), Used(Point { x: 10, y: 0 }), Unused(Point { x: 11, y: 0 })] } }";    
     let f2: &str = 
         "$$$ exec p1 : [robots/bender]
         Anfield 20 15:
@@ -74,9 +76,10 @@ fn mt_af_parse() {
         Piece 4 1:
         .OO.";
 
-    assert_eq!(format!("{:?}",parsing::AnField::parse(f1)),"AnField { player: Player { id: 1, chars: \"@a\" }, self_owned: [Point { x: 9, y: 2 }], ennemie_owned: [Point { x: 9, y: 12 }], length: 15, width: 20 }");
-    assert_eq!(format!("{:?}",parsing::AnField::parse(f2)),
-    "AnField { player: Player { id: 1, chars: \"@a\" }, self_owned: [Point { x: 8, y: 2 }, Point { x: 9, y: 2 }, Point { x: 10, y: 2 }, Point { x: 7, y: 3 }, Point { x: 8, y: 3 }, Point { x: 9, y: 3 }, Point { x: 7, y: 4 }, Point { x: 8, y: 4 }], ennemie_owned: [Point { x: 9, y: 10 }, Point { x: 10, y: 10 }, Point { x: 8, y: 11 }, Point { x: 9, y: 11 }, Point { x: 10, y: 11 }, Point { x: 9, y: 12 }, Point { x: 10, y: 12 }], length: 15, width: 20 }"
-    );
+    let f2_expected = 
+    "AnField { player: Player { id: 1, chars: \"@a\" }, self_owned: [Point { x: 8, y: 2 }, Point { x: 9, y: 2 }, Point { x: 10, y: 2 }, Point { x: 7, y: 3 }, Point { x: 8, y: 3 }, Point { x: 9, y: 3 }, Point { x: 7, y: 4 }, Point { x: 8, y: 4 }], ennemie_owned: [Point { x: 9, y: 10 }, Point { x: 10, y: 10 }, Point { x: 8, y: 11 }, Point { x: 9, y: 11 }, Point { x: 10, y: 11 }, Point { x: 9, y: 12 }, Point { x: 10, y: 12 }], length: 15, width: 20, piece: Piece { slots: [Used(Point { x: 0, y: 0 }), Used(Point { x: 1, y: 0 }), Used(Point { x: 2, y: 0 }), Used(Point { x: 3, y: 0 }), Used(Point { x: 4, y: 0 }), Used(Point { x: 5, y: 0 }), Used(Point { x: 6, y: 0 }), Used(Point { x: 7, y: 0 }), Unused(Point { x: 8, y: 0 }), Used(Point { x: 9, y: 0 }), Used(Point { x: 10, y: 0 }), Unused(Point { x: 11, y: 0 })] } }";
+
+    assert_eq!(format!("{:?}",parsing::AnField::parse(f1)),f1_expected);
+    assert_eq!(format!("{:?}",parsing::AnField::parse(f2)),f2_expected);
     
 }
