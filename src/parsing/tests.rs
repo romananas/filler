@@ -28,6 +28,7 @@ fn ft_extract_wl() {
 }
 
 #[test]
+// depend on all previous tests
 fn mt_af_parse() {
     let f1: &str = 
         "$$$ exec p1 : [robots/bender]
