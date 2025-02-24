@@ -1,4 +1,4 @@
-use super::{player::Player, points::{self, Point}};
+use super::{pieces::{self, Piece, Slot}, player::Player, points::{self, Point}};
 
 #[derive(Debug,PartialEq,Eq,Clone)]
 pub struct AnField<'a> {
@@ -14,6 +14,8 @@ pub struct AnField<'a> {
     // width and length of the AntField
     pub length: u32,
     pub width: u32,
+    
+    pub piece: Piece
 }
 
 impl<'a> AnField<'a> {
@@ -29,7 +31,7 @@ impl<'a> AnField<'a> {
             _ => 1,
         };
         let adv = Player::new(p2, None);
-        let (w,l) = match extract_lenght_width(lines[1]) {
+        let (w,l) = match extract_anfield_lenght_width(lines[1]) {
             Some((w,l)) => (w,l),
             None => panic!("can't parse anfield size"),
         };
@@ -39,12 +41,18 @@ impl<'a> AnField<'a> {
         };
         let player_owned = get_points(field.clone(), p.chars());
         let ennemie_owned = get_points(field, adv.chars());
+        // let (pw,pl) = match extract_anfield_lenght_width(lines[3+l as usize]) {
+        //     Some((w,l)) => (w,l),
+        //     None => panic!("can't parse anfield size"),
+        // };
+        let piece = Piece::from_vec(lines[(3+l+1) as usize..].to_vec(), None, '.').unwrap();
         Self {
             player: p,
             self_owned: player_owned,
             ennemie_owned: ennemie_owned,
             length: l,
             width: w,
+            piece: piece
         }
     }
 }
@@ -77,7 +85,21 @@ pub fn extract_field(lines: Vec<&str>) -> Option<Vec<&str>> {
     return Some(r);
 }
 
-pub fn extract_lenght_width(line: &str) -> Option<(u32,u32)> {
+pub fn extract_piece_lenght_width(line: &str) -> Option<(u32,u32)> {
+    let tmp = line.split_whitespace().collect::<Vec<&str>>();
+    if tmp.len() != 3{
+        return None;
+    }
+    if tmp[0] != "Piece" || !tmp[2].ends_with(":") {
+        return None;
+    }
+    match (tmp[1].parse::<u32>(),tmp[2][0..tmp[2].len() -1].parse::<u32>()) {
+        (Ok(w),Ok(l)) => Some((w,l)),
+        _ => None,
+    }
+}
+
+pub fn extract_anfield_lenght_width(line: &str) -> Option<(u32,u32)> {
     let tmp = line.split_whitespace().collect::<Vec<&str>>();
     if tmp.len() != 3{
         return None;

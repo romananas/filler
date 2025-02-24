@@ -5,6 +5,7 @@
 mod player;
 mod parsing;
 mod points;
+mod pieces;
 
 mod tests;
 pub use parsing::*;
