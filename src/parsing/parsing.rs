@@ -23,7 +23,7 @@ impl<'a> AnField<'a> {
         let lines = arg.split("\n").collect::<Vec<&str>>();
         let player_n = match extract_player(lines[0]) {
             Some(v) => v,
-            None => panic!("can't parse player number"),
+            None => panic!("can't parse player number on line {}",lines[0]),
         };
         let p = Player::new(player_n as usize, None);
         let p2 = match p.id() {
