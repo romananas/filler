@@ -31,3 +31,4 @@ pub fn is_valid_placement(anfield: &AnField, piece: &Piece, x: usize, y: usize) 
     //  pièce est valide uniquement si elle touche exactement une cellule de ton territoire
     touch_count == 1
 }
+

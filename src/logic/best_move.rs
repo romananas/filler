@@ -1,7 +1,9 @@
 use crate::parsing::{AnField, Piece};
 use crate::parsing::points::Point;
+use crate::parsing::pieces::Slot;
 use crate::logic::valid_placement::is_valid_placement;
 
+// la meilleure position pour placer la pièce et retourne (x, y)
 pub fn find_best_move(anfield: &AnField, piece: &Piece) -> (usize, usize) {
     let mut best_x = 0;
     let mut best_y = 0;
@@ -24,11 +26,12 @@ pub fn find_best_move(anfield: &AnField, piece: &Piece) -> (usize, usize) {
     (best_x, best_y)
 }
 
+// calcul score de placement 
 fn evaluate_position(anfield: &AnField, piece: &Piece, x: usize, y: usize) -> usize {
     let mut score = 0;
 
     for slot in &piece.slots {
-        if let crate::parsing::Slot::Used(piece_point) = slot {
+        if let Slot::Used(piece_point) = slot {
             let grid_x = x as u32 + piece_point.x;
             let grid_y = y as u32 + piece_point.y;
 
@@ -42,4 +45,24 @@ fn evaluate_position(anfield: &AnField, piece: &Piece, x: usize, y: usize) -> us
     }
 
     score
+}
+
+// toutes les coordonnées globales occupées par la pièce lorsqu'elle est placée
+// pub fn get_piece_global_coordinates(x: usize, y: usize, piece: &Piece) -> Vec<(u32, u32)> {
+//     let mut coordinates = Vec::new();
+
+//     for slot in &piece.slots {
+//         if let Slot::Used(slot_point) = slot {
+//             let global_x = x as u32 + slot_point.x;
+//             let global_y = y as u32 + slot_point.y;
+//             coordinates.push((global_x, global_y));
+//         }
+//     }
+
+//     coordinates
+
+// }
+
+pub fn get_piece_global_coordinates(x: usize, y: usize, _piece: &Piece) -> (u32, u32) {
+    (x as u32, y as u32)
 }
