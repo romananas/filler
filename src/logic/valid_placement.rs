@@ -1,4 +1,4 @@
-use crate::parsing::{AnField, Piece, Slot};  
+use crate::parsing::{AnField, pieces::Piece, pieces::Slot};  
 use crate::parsing::points::Point;
 
 pub fn is_valid_placement(anfield: &AnField, piece: &Piece, x: usize, y: usize) -> bool {

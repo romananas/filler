@@ -2,5 +2,5 @@
 
 
 pub fn print_move(x: usize, y: usize) {
-    println!("{} {}", x, y);
+    println!("{} {}\n", x, y);
 }

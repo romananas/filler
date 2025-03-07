@@ -1,19 +1,15 @@
 
 
 use crate::parsing::AnField;
-use std::io::{self, Read};
 
+#[derive(Debug)]
 pub struct GameState {
     pub anfield: AnField<'static>,
 }
 
-pub fn read_input() -> GameState {
-    // lis toute l'entrée 
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input).expect("Failed to read from stdin");
-
+pub fn read_input(player_n :usize,input: &str) -> GameState {
     // use le parsing  de Romann
-    let anfield = AnField::parse(&input);
+    let anfield = AnField::parse(player_n,&input);
 
     // return la structure complète qui servira aux autres modules
     GameState { anfield }
