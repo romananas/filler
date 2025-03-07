@@ -14,9 +14,9 @@ impl<'a> Player<'a> {
         let chars = match chars {
             Some(chars) => chars,
             None => match id {
-                1 => &DEFAULT_PLAYER1,
-                2 => &DEFAULT_PLAYER2,
-                _ => panic!("no default chars set for this player"),  
+                1 => DEFAULT_PLAYER1,
+                2 => DEFAULT_PLAYER2,
+                _ => panic!("no default chars set for this player{:?}", id),  
             },
         };
         Self {

@@ -1,4 +1,4 @@
-use super::{pieces::{self, Piece, Slot}, player::Player, points::{self, Point}};
+use super::{pieces::{self, Piece, Slot}, player::{self, Player}, points::{self, Point}};
 
 #[derive(Debug,PartialEq,Eq,Clone)]
 pub struct AnField<'a> {
@@ -19,25 +19,31 @@ pub struct AnField<'a> {
 }
 
 impl<'a> AnField<'a> {
-    pub fn parse(arg: &str) -> Self {
+    pub fn parse(player_n: usize, arg: &str) -> Self {
+        let mut i = 0;
         let lines = arg.split("\n").collect::<Vec<&str>>();
-        let player_n = match extract_player(lines[0]) {
-            Some(v) => v,
-            None => panic!("can't parse player number on line {}",lines[0]),
-        };
-        let p = Player::new(player_n as usize, None);
+        if !lines[0].starts_with("Anfield") {
+            i = 1;
+        }
+        // let player_n = match extract_player(lines[0]) {
+        //     Some(v) => v,
+        //     None => panic!("can't parse player number on line {}",lines[0]),
+        // };
+        let p = Player::new(player_n, None);
         let p2 = match p.id() {
             1 => 2,
-            _ => 1,
+            2 => 1,    
+            _ => panic!("Unexpected player ID: {}", p.id()),
         };
         let adv = Player::new(p2, None);
-        let (w,l) = match extract_anfield_lenght_width(lines[1]) {
+
+        let (w,l) = match extract_anfield_lenght_width(lines[i]) {
             Some((w,l)) => (w,l),
             None => panic!("can't parse anfield size"),
         };
-        let field = match extract_field(lines[3..(3+l) as usize].to_vec()) {
+        let field = match extract_field(lines[2+i..(2+i+l as usize) as usize].to_vec()) {
             Some(f) => f,
-            None => panic!("can't parse anfield on lines 3 - {}",3+l),
+            None => panic!("can't parse anfield on lines {}-{}", 2+i,2+i+l as usize),
         };
         let player_owned = get_points(field.clone(), p.chars());
         let ennemie_owned = get_points(field, adv.chars());
@@ -109,22 +115,35 @@ pub fn extract_anfield_lenght_width(line: &str) -> Option<(u32,u32)> {
     }
     match (tmp[1].parse::<u32>(),tmp[2][0..tmp[2].len() -1].parse::<u32>()) {
         (Ok(w),Ok(l)) => Some((w,l)),
-        _ => None,
-    }
-}
-
-pub fn extract_player(line: &str) -> Option<u32>{
-    let tmp = line.split_ascii_whitespace().collect::<Vec<&str>>();
-    if tmp.len() != 5 {
-        return None;
-    }
-    if tmp[0] != "$$$" || tmp[1] != "exec" || !tmp[2].starts_with("p") {
-        return None;
-    }
-    match tmp[2][1..].parse::<u32>() {
-        Ok(v) => Some(v),
-        Err(e) => {
-            panic!("{e}");
+        (Ok(_),Err(e2)) => {
+            println!("{}" , e2);
+            return None;
+        }
+        ,
+        (Err(e1),Ok(_)) => {
+            println!("{}", e1);
+            return None;
+        }
+        ,
+        (Err(e1),Err(e2)) => {
+            println!("{} {}", e1, e2);
+            return None;
         }
     }
 }
+
+// pub fn extract_player(line: &str) -> Option<u32>{
+//     let tmp = line.split_ascii_whitespace().collect::<Vec<&str>>();
+//     if tmp.len() != 5 {
+//         return None;
+//     }
+//     if tmp[0] != "$$$" || tmp[1] != "exec" || !tmp[2].starts_with("p") {
+//         return None;
+//     }
+//     match tmp[2][1..].parse::<u32>() {
+//         Ok(v) => Some(v),
+//         Err(e) => {
+//             panic!("{e}");
+//         }
+//     }
+// }
