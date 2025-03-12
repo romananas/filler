@@ -8,6 +8,7 @@ use logic::print_move::print_move;
 
 fn main() {
     let mut player = 0;
+    let mut first_turn = true;
     loop {
         // Lire l'état du jeu via read_input
         let (player_n, complete_input) = get_stdin();
@@ -20,10 +21,13 @@ fn main() {
         let game_state = read_input(player, complete_input.as_str());
         // println!("here {:?}",game_state.anfield);
         // Trouver la meilleure position
-        let (x, y) = find_best_move(&game_state.anfield, &game_state.anfield.piece);
+        let (x, y) = find_best_move(&game_state.anfield, &game_state.anfield.piece, first_turn);
 
         // Afficher la position choisie
         print_move(x, y);
+
+        // Après le premier tour, on passe `first_turn` à `false`
+        first_turn = false;
     }
 }
 pub fn get_stdin() -> (usize, String) {
